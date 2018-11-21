@@ -170,6 +170,17 @@ integer_type_codes[itk_none] =
   '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0'
 };
 
+/* Exception specifications may carry unresolved noexcept expressions
+   before template substitution, but nothrow_spec_p will fail an
+   assert check if it comes across such a spec while
+   !processing_template_decl.  So, when we start processing the
+   signature of a template function, that may contain a such
+   unresolved expressions, we set this variable.  Then, as we process
+   the exception spec, we set processing_template_decl.  We don't want
+   to set processing_template_decl throughout, becuase this affects
+   other relevant tests, such as no_linkage_check.  */
+static int processing_template_function_signature;
+
 static int decl_is_template_id (const tree, tree* const);
 
 /* Functions for handling substitutions.  */
@@ -418,7 +429,11 @@ canonicalize_for_substitution (tree node)
 	  || TREE_CODE (node) == METHOD_TYPE)
 	{
 	  node = build_ref_qualified_type (node, type_memfn_rqual (orig));
+	  if (processing_template_function_signature)
+	    processing_template_decl++;
 	  tree r = canonical_eh_spec (TYPE_RAISES_EXCEPTIONS (orig));
+	  if (processing_template_function_signature)
+	    processing_template_decl--;
 	  if (flag_noexcept_type)
 	    node = build_exception_variant (node, r);
 	  else
@@ -836,6 +851,7 @@ write_encoding (const tree decl)
 	     write_bare_function_type -- otherwise, it will get
 	     confused about which artificial parameters to skip.  */
 	  d = NULL_TREE;
+	  ++processing_template_function_signature;
 	}
       else
 	{
@@ -846,6 +862,9 @@ write_encoding (const tree decl)
       write_bare_function_type (fn_type,
 				mangle_return_type_p (decl),
 				d);
+
+      if (tmpl)
+	--processing_template_function_signature;
     }
 }
 
