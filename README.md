@@ -31,3 +31,15 @@ pip install -r requirements.txt
 ## 仓库说明
 
 本仓库独立于 `gcc` 项目，专门存放周敏晖各论课申报材料。
+
+### 推送到 GitHub
+
+1. 在 GitHub 创建空仓库：https://github.com/new?name=minhuizhou
+2. 不要勾选 “Add a README file”
+3. 在本目录运行：
+
+```bash
+./push_to_github.sh
+```
+
+如需 Cloud Agent 继续维护此仓库，请在 Cursor Integrations 中为 `minhuizhou` 授权 GitHub App。
