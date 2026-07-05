@@ -1,5 +1,7 @@
 # 周敏晖各论课申报材料
 
+上海商学院一流本科课程（各论课）申报相关文档与生成脚本。
+
 ## 文件清单
 
 | 文件 | 说明 |
@@ -19,3 +21,13 @@ python3 generate_course_application.py
 python3 generate_ppt_and_syllabus.py
 python3 generate_haoyuqing_summary.py
 ```
+
+## 环境依赖
+
+```bash
+pip install -r requirements.txt
+```
+
+## 仓库说明
+
+本仓库独立于 `gcc` 项目，专门存放周敏晖各论课申报材料。
